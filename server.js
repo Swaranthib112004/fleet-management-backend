@@ -37,17 +37,10 @@ app.use(helmet({
 }));
 
 app.use(cors({
-  origin: function (origin, callback) {
-    if (!origin || /^https?:\/\/localhost(:\d+)?$/.test(origin)) {
-      return callback(null, true);
-    }
-    const allowedOrigins = [process.env.FRONTEND_URL].filter(Boolean);
-    if (allowedOrigins.includes(origin)) {
-      callback(null, true);
-    } else {
-      callback(null, true); // Fallback for production testing
-    }
-  },
+  origin: [
+    "https://fleet-management-system-virid-seven.vercel.app",
+    "http://localhost:5173"
+  ],
   credentials: true
 }));
 
@@ -124,7 +117,7 @@ module.exports.server = server;
 
 if (require.main === module) {
   // Attempt to start once; exit on fatal errors (e.g. port in use).
-  server.listen(PORT, () => logger.info(`🚀 Server running on port ${PORT}`))
+  server.listen(PORT, () => console.log(`Server running on port ${PORT}`))
     .on('error', (err) => {
       if (err && err.code === 'EADDRINUSE') {
         logger.error(`❌ Port ${PORT} is already in use. Exiting.`);
